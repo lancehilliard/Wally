@@ -58,10 +58,9 @@ namespace Wally.ConsoleApp {
                     var gigabytesRemaining = Convert.ToInt32(((IJavaScriptExecutor) driver).ExecuteScript(@"return parseInt(arguments[0].innerHTML.match(/\d/g).join(''));", element));
                     var quotaProgress = 1 - decimal.Divide(gigabytesRemaining, 1024);
                     var warningProgress = monthProgress * .91m;
-                    if (quotaProgress >= warningProgress) {
-                        element = driver.FindElement(By.CssSelector(selectorToFindGraphDiv));
-                        ((IJavaScriptExecutor) driver).ExecuteScript(@"var n=document.createElement('div');n.style.position='absolute';n.style.right=0;n.style.marginRight='29px';n.style.border='4px solid red';n.style.top='34%';n.style.backgroundColor='lightblue';n.style.fontSize='96pt';n.style.lineHeight=1.0;n.style.fontWeight='bold';n.innerHTML='!!!';n.style.zIndex=1000;console.log(n);arguments[0].prepend(n);", element);
-                    }
+                    var text = quotaProgress >= warningProgress ? "!!!" : $"{(int)(quotaProgress / warningProgress * 100)}";
+                    element = driver.FindElement(By.CssSelector(selectorToFindGraphDiv));
+                    ((IJavaScriptExecutor) driver).ExecuteScript($@"var n=document.createElement('div');n.style.position='absolute';n.style.right=0;n.style.marginRight='29px';n.style.border='4px solid red';n.style.top='34%';n.style.backgroundColor='lightblue';n.style.fontSize='96pt';n.style.lineHeight=1.0;n.style.fontWeight='bold';n.innerHTML='{text}';n.style.zIndex=1000;console.log(n);arguments[0].prepend(n);", element);
                 }
 
                 return null;
@@ -94,7 +93,7 @@ namespace Wally.ConsoleApp {
             var pageInitializer = new PageInitializer(_driver);
             var tabSwitcher = new TabSwitcher(voiceListener, _driver);
             _tourGuide = new TourGuide(internetConnectionChecker, tabLoader, pageInitializer, pingPlotterWindowStateChanger, tabSwitcher);
-            var pages = Pages.OrderBy(x => "https://reg.usps.com/entreg/LoginAction_input?app=Phoenix&appURL=https://informeddelivery.usps.com".Equals(x.Url) ? 0 : 1).ToList();
+            var pages = Pages.OrderBy(x => "quota".Equals(x.VoiceCommandWord) ? 0 : 1).ToList();
             try {
                 _tourGuide.Guide(pages, _driver, OnLoadingPage, OnShowingPage, OnInitializingPage, OnExpired, OnError);
 
