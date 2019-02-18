@@ -1,6 +1,6 @@
 ﻿[
-  { "VoiceCommandWord" : "radar", "Url" : "https://www.msn.com/en-us/weather/fullscreenmaps", "SecondsToWaitForPageLoad" : 2 }
-  , { "VoiceCommandWord" : "weather", "Url" : "https://www.accuweather.com/en/us/memphis-tn/38018/weather-forecast/351089", "SecondsToWaitForPageLoad" : 5 }
+  { "VoiceCommandWord" : "weather", "Url" : "https://www.accuweather.com/en/us/memphis-tn/38018/weather-forecast/351089", "SecondsToWaitForPageLoad" : 5 }
+  , { "VoiceCommandWord" : "radar", "Url" : "https://www.msn.com/en-us/weather/fullscreenmaps", "SecondsToWaitForPageLoad" : 2 }
   // , { "VoiceCommandWord" : "forecast", "Url" : "https://www.wunderground.com/weather/us/tn/memphis", "SecondsToWaitForPageLoad" : 5 }
   , { "VoiceCommandWord" : "quota", "Url" : "https://customer.xfinity.com/#/services/internet#usage", "SecondsToWaitForPageLoad" : 15 }
 ]
