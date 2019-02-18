@@ -74,9 +74,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="radar.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="wally.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
