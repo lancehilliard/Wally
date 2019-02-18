@@ -38,37 +38,37 @@ namespace Wally.ConsoleApp {
             }
             try {
                 _tourGuide.Guide(pages, _driver, OnLoadingPage, OnShowingPage, OnInitializingPage, OnExpired, OnError);
-
-                void OnInitializingPage(int pageNumber, Page page) {
-                    OnVerbingPage(pageNumber, page, "Initializing");
-                }
-
-                void OnLoadingPage(int pageNumber, Page page) {
-                    OnVerbingPage(pageNumber, page, "Loading");
-                }
-
-                void OnShowingPage(int pageNumber, Page page) {
-                    OnVerbingPage(pageNumber, page, "Showing");
-                }
-
-                void OnVerbingPage(int pageNumber, Page page, string verb) {
-                    Console.WriteLine($"{DateTime.Now}: {verb} ({pageNumber}/{pages.Count}): '{page.Url}'");
-                }
-
-                void OnExpired(Page page) {
-                    Console.WriteLine($"{DateTime.Now}: Expired: '{page.Url}'");
-                }
-
-                void OnError(Page page, Exception exception) {
-                    Console.WriteLine($"ERROR - {DateTime.Now}: {exception}");
-                    Thread.Sleep(5000);
-                }
             }
             catch (Exception e) {
                 Console.WriteLine($"Program {DateTime.Now}: {e}");
                 Thread.Sleep(20000);
                 ConsoleEventCallback(CtrlCloseEvent);
                 Environment.Exit(1);
+            }
+
+            void OnInitializingPage(int pageNumber, Page page) {
+                OnVerbingPage(pageNumber, page, "Initializing");
+            }
+
+            void OnLoadingPage(int pageNumber, Page page) {
+                OnVerbingPage(pageNumber, page, "Loading");
+            }
+
+            void OnShowingPage(int pageNumber, Page page) {
+                OnVerbingPage(pageNumber, page, "Showing");
+            }
+
+            void OnVerbingPage(int pageNumber, Page page, string verb) {
+                Console.WriteLine($"{DateTime.Now}: {verb} ({pageNumber}/{pages.Count}): '{page.Url}'");
+            }
+
+            void OnExpired(Page page) {
+                Console.WriteLine($"{DateTime.Now}: Expired: '{page.Url}'");
+            }
+
+            void OnError(Page page, Exception exception) {
+                Console.WriteLine($"ERROR - {DateTime.Now}: {exception}");
+                Thread.Sleep(5000);
             }
         }
 

@@ -14,9 +14,8 @@ namespace Wally.ConsoleApp {
                 var voiceCommandWord = x["VoiceCommandWord"].Value<string>();
                 var url = x["Url"].Value<string>();
                 DateTime.TryParse(x["Expiration"]?.Value<string>(), out var expiration);
-                int.TryParse(x["SecondsToDisplayAfterAction"]?.Value<string>(), out var secondsToDisplayAfterAction);
                 int.TryParse(x["SecondsToWaitForPageLoad"]?.Value<string>(), out var secondsToWaitForPageLoad);
-                return new Page(voiceCommandWord, url, expiration: expiration, secondsToDisplayAfterAction: secondsToDisplayAfterAction, secondsToWaitForPageLoad: secondsToWaitForPageLoad);
+                return new Page(voiceCommandWord, url, expiration, secondsToWaitForPageLoad);
             }).ToList();
             return result;
         }
