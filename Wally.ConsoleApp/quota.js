@@ -28,4 +28,5 @@
     }
     Wally_HideAllExcept('#usage');
     Wally_HideAll('.body4', '.chart__pagination', '.tooltip-modal', '.usage-courtesy--aside');
+    document.querySelector('#usage').style.zoom = 1.25;
 })();
