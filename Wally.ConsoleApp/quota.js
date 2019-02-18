@@ -20,7 +20,7 @@
         n.style.fontSize='96pt';
         n.style.lineHeight=1.0;
         n.style.fontWeight='bold';
-        n.innerHTML=quotaProgress >= warningProgress ? '!!!' : Math.floor(quotaProgress / warningProgress * 100);
+        n.innerHTML=Math.floor(quotaProgress / warningProgress * 100);
         n.style.zIndex=1000;
         graphDivElement.prepend(n);
     }
