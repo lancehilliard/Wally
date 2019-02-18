@@ -1,0 +1,12 @@
+﻿[
+  { "VoiceCommandWord" : "quota"
+    , "Url" : "https://customer.xfinity.com/#/services/internet#usage"
+    , "SecondsToWaitForPageLoad" : 10
+  }, { "VoiceCommandWord" : "weather"
+    , "Url" : "https://www.wunderground.com/weather/us/tn/memphis"
+    , "SecondsToWaitForPageLoad" : 5
+  }, { "VoiceCommandWord" : "radar"
+    , "Url" : "https://www.msn.com/en-us/weather/fullscreenmaps"
+    , "SecondsToWaitForPageLoad" : 2
+  }
+]
