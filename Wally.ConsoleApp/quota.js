@@ -28,15 +28,4 @@
     }
     Wally_HideAllExcept('#usage');
     Wally_HideAll('.body4', '.chart__pagination', '.tooltip-modal', '.usage-courtesy--aside');
-
-    setInterval(function() {
-        let continueSessionButton = document.querySelector('#ngdialog2 > div.ngdialog-content > div:nth-child(1) > div > div:nth-child(1) > button');
-        if (continueSessionButton) {
-            continueSessionButton.click();
-        }
-        let noSurveyButton = document.querySelector('#no');
-        if (noSurveyButton) {
-            noSurveyButton.click();
-        }
-    }, 250);
 })();
