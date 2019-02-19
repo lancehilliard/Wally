@@ -24,7 +24,7 @@ namespace Wally.Tour {
         }
 
         string GetWallyfiedScript(string filepath) {
-            var result = $"{File.ReadAllText("wally.js")}{File.ReadAllText(filepath)}";
+            var result = $"{File.ReadAllText("wally.js")}{Environment.NewLine}{File.ReadAllText(filepath)}";
             return result;
         }
 
