@@ -20,6 +20,7 @@ namespace Wally.WinForms
         private static readonly string BudgetCategories = ConfigurationManager.AppSettings["BudgetCategories"];
         private static readonly string BrowserDocumentContent = ConfigurationManager.AppSettings["BrowserDocumentContent"];
         private static readonly string WeatherCoordinate = ConfigurationManager.AppSettings["WeatherCoordinate"];
+        private static readonly string DaysUntilEvents = ConfigurationManager.AppSettings["DaysUntilEvents"];
         private readonly DataQuotaInfoGetter _dataQuotaInfoGetter = new DataQuotaInfoGetter();
         private readonly WeatherGetter _weatherGetter = new WeatherGetter(WeatherApiKey, new IconGetter());
         private readonly BackgroundWorker _netGraphBackgroundWorker = new BackgroundWorker();
@@ -30,6 +31,8 @@ namespace Wally.WinForms
         private decimal _preDawnUsage = default(decimal);
         private readonly IReadOnlyCollection<BudgetApiCategory> _budgetApiCategories;
         private readonly WeatherCoordinate _weatherCoordinate;
+        private IReadOnlyCollection<DaysUntilEvent> _daysUntilEvents;
+        private int _daysUntilEventsIndex = 0;
 
         public MainForm()
         {
@@ -40,12 +43,14 @@ namespace Wally.WinForms
             }
             _budgetApiCategories = _configAdapter.ToBudgetApiCategories(BudgetCategories);
             _weatherCoordinate = _configAdapter.ToWeatherCoordinate(WeatherCoordinate);
+            _daysUntilEvents = _configAdapter.ToDaysUntilEvents(DaysUntilEvents);
         }
 
         private void MainForm_Load(object sender, EventArgs e) {
             UpdateChart();
             UpdateWeather();
             UpdateBalances();
+            UpdateDaysUntil();
             timer30mins.Start();
             timer10mins.Start();
             timer5mins.Start();
@@ -182,6 +187,27 @@ namespace Wally.WinForms
             _netResults.AddRange(netResultsToKeep);
         }
 
+        public void UpdateDaysUntil()
+        {
+            _daysUntilEvents = _daysUntilEvents.Where(x => x.DaysUntil <= x.DisplayCountInDays).ToList();
+            if (_daysUntilEvents.Any())
+            {
+                DaysRemainingLabel.Show();
+                DaysUntilLabel.Show();
+                EventNameLabel.Show();
+                _daysUntilEventsIndex = _daysUntilEventsIndex >= _daysUntilEvents.Count ? 0 : _daysUntilEventsIndex;
+                var daysUntilEvent = _daysUntilEvents.ElementAt(_daysUntilEventsIndex++);
+                DaysRemainingLabel.Text = $"{daysUntilEvent.DaysUntil}";
+                EventNameLabel.Text = daysUntilEvent.Name;
+            }
+            else
+            {
+                DaysRemainingLabel.Hide();
+                DaysUntilLabel.Hide();
+                EventNameLabel.Hide();
+            }
+        }
+
         private void timer30mins_Tick(object sender, EventArgs e) {
             UpdateChart();
         }
@@ -193,6 +219,7 @@ namespace Wally.WinForms
         private void timer5mins_Tick(object sender, EventArgs e)
         {
             UpdateBalances();
+            UpdateDaysUntil();
         }
 
         private void timer1sec_Tick(object sender, EventArgs e) {

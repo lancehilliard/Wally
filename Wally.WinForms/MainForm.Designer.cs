@@ -41,6 +41,9 @@
             this.timer5mins = new System.Windows.Forms.Timer(this.components);
             this.panel1 = new System.Windows.Forms.Panel();
             this.BalancesLabel = new System.Windows.Forms.Label();
+            this.DaysRemainingLabel = new System.Windows.Forms.Label();
+            this.DaysUntilLabel = new System.Windows.Forms.Label();
+            this.EventNameLabel = new System.Windows.Forms.Label();
             this.forecastUserControl1 = new Wally.WinForms.ForecastUserControl();
             this.forecastUserControl2 = new Wally.WinForms.ForecastUserControl();
             this.forecastUserControl3 = new Wally.WinForms.ForecastUserControl();
@@ -146,6 +149,36 @@
             this.BalancesLabel.TabIndex = 0;
             this.BalancesLabel.Text = "Evan: $42.00; Quinn: $86.00";
             // 
+            // DaysRemainingLabel
+            // 
+            this.DaysRemainingLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 72F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DaysRemainingLabel.Location = new System.Drawing.Point(987, 562);
+            this.DaysRemainingLabel.Name = "DaysRemainingLabel";
+            this.DaysRemainingLabel.Size = new System.Drawing.Size(206, 95);
+            this.DaysRemainingLabel.TabIndex = 12;
+            this.DaysRemainingLabel.Text = "99";
+            this.DaysRemainingLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // DaysUntilLabel
+            // 
+            this.DaysUntilLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DaysUntilLabel.Location = new System.Drawing.Point(988, 656);
+            this.DaysUntilLabel.Name = "DaysUntilLabel";
+            this.DaysUntilLabel.Size = new System.Drawing.Size(195, 23);
+            this.DaysUntilLabel.TabIndex = 13;
+            this.DaysUntilLabel.Text = "DAYS UNTIL";
+            this.DaysUntilLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // EventNameLabel
+            // 
+            this.EventNameLabel.AutoSize = true;
+            this.EventNameLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.EventNameLabel.Location = new System.Drawing.Point(1005, 683);
+            this.EventNameLabel.Name = "EventNameLabel";
+            this.EventNameLabel.Size = new System.Drawing.Size(339, 39);
+            this.EventNameLabel.TabIndex = 14;
+            this.EventNameLabel.Text = "The Really Big Event";
+            // 
             // forecastUserControl1
             // 
             this.forecastUserControl1.Location = new System.Drawing.Point(14, 559);
@@ -180,6 +213,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1350, 730);
+            this.Controls.Add(this.EventNameLabel);
+            this.Controls.Add(this.DaysUntilLabel);
+            this.Controls.Add(this.DaysRemainingLabel);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.webBrowser2);
             this.Controls.Add(this.forecastUserControl1);
@@ -215,6 +251,8 @@
         private System.Windows.Forms.Timer timer5mins;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label BalancesLabel;
-
+        private System.Windows.Forms.Label DaysRemainingLabel;
+        private System.Windows.Forms.Label DaysUntilLabel;
+        private System.Windows.Forms.Label EventNameLabel;
     }
 }
