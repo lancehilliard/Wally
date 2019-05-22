@@ -31,7 +31,6 @@ namespace Wally.WinForms
         private decimal _preDawnUsage = default(decimal);
         private readonly IReadOnlyCollection<BudgetApiCategory> _budgetApiCategories;
         private readonly WeatherCoordinate _weatherCoordinate;
-        private IReadOnlyCollection<DaysUntilEvent> _daysUntilEvents;
         private int _daysUntilEventsIndex = 0;
 
         public MainForm()
@@ -43,7 +42,6 @@ namespace Wally.WinForms
             }
             _budgetApiCategories = _configAdapter.ToBudgetApiCategories(BudgetCategories);
             _weatherCoordinate = _configAdapter.ToWeatherCoordinate(WeatherCoordinate);
-            _daysUntilEvents = _configAdapter.ToDaysUntilEvents(DaysUntilEvents);
         }
 
         private void MainForm_Load(object sender, EventArgs e) {
@@ -189,14 +187,14 @@ namespace Wally.WinForms
 
         public void UpdateDaysUntil()
         {
-            _daysUntilEvents = _daysUntilEvents.Where(x => x.DaysUntil <= x.DisplayCountInDays).ToList();
-            if (_daysUntilEvents.Any())
+            var daysUntilEvents = _configAdapter.ToDaysUntilEvents(DaysUntilEvents).Where(x => x.DaysUntil <= x.DisplayCountInDays).ToList();
+            if (daysUntilEvents.Any())
             {
                 DaysRemainingLabel.Show();
                 DaysUntilLabel.Show();
                 EventNameLabel.Show();
-                _daysUntilEventsIndex = _daysUntilEventsIndex >= _daysUntilEvents.Count ? 0 : _daysUntilEventsIndex;
-                var daysUntilEvent = _daysUntilEvents.ElementAt(_daysUntilEventsIndex++);
+                _daysUntilEventsIndex = _daysUntilEventsIndex >= daysUntilEvents.Count ? 0 : _daysUntilEventsIndex;
+                var daysUntilEvent = daysUntilEvents[_daysUntilEventsIndex++];
                 DaysRemainingLabel.Text = $"{daysUntilEvent.DaysUntil}";
                 EventNameLabel.Text = daysUntilEvent.Name;
             }
