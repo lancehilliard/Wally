@@ -35,12 +35,12 @@ namespace Wally.WinForms {
                 var name = parts[0];
                 var when = parts[1];
                 var displayCountInDays = Convert.ToInt32(parts[2]);
-                if (when.Length == 4)
+                if (parts[1].Length == 4)
                 {
                     when = $"{DateTime.Now.Year}{when}";
                 }
                 var moment = DateTime.ParseExact(when, "yyyyMMdd", CultureInfo.InvariantCulture);
-                if (moment.Date < DateTime.Now.Date)
+                if (parts[1].Length == 4 && moment.Date < DateTime.Now.Date)
                 {
                     moment = moment.AddYears(1);
                 }
