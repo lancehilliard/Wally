@@ -1,34 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Globalization;
 using System.Linq;
 using Wally.Core;
 
 namespace Wally.WinForms {
-    public class ConfigAdapter {
-        public IReadOnlyCollection<BudgetApiCategory> ToBudgetApiCategories(string config) {
-            var delimitedCategories = config.Split('|');
+    public class ConfigGetter {
+        private static readonly string DaysUntilEventsAnnual = ConfigurationManager.AppSettings["DaysUntilEventsAnnual"];
+        private static readonly string DaysUntilEventsOnce = ConfigurationManager.AppSettings["DaysUntilEventsAnnual"];
+        private static readonly string WeatherCoordinate = ConfigurationManager.AppSettings["WeatherCoordinate"];
+        private static readonly string BudgetCategories = ConfigurationManager.AppSettings["BudgetCategories"];
+        public IReadOnlyCollection<BudgetApiCategory> GetBudgetApiCategories() {
+            var delimitedCategories = BudgetCategories.Split('|');
             var result = delimitedCategories.Select(x => {
                 var parts = x.Split(',');
                 var displayName = parts[0];
                 var budgetId = parts[1];
                 var categoryId = parts[2];
-                return new BudgetApiCategory(displayName, budgetId, categoryId);
+                var extraDollars = Convert.ToDecimal(parts[3]);
+                return new BudgetApiCategory(displayName, budgetId, categoryId, extraDollars);
             }).ToList();
             return result;
         }
 
-        public WeatherCoordinate ToWeatherCoordinate(string weatherCoordinate) {
-            var parts = weatherCoordinate.Split(',');
+        public WeatherCoordinate GetWeatherCoordinate() {
+            var parts = WeatherCoordinate.Split(',');
             var latitude = double.Parse(parts[0].Trim());
             var longitude = double.Parse(parts[1].Trim());
             var result = new WeatherCoordinate(latitude, longitude);
             return result;
         }
 
-        public IReadOnlyCollection<DaysUntilEvent> ToDaysUntilEvents(string config) {
+        public IReadOnlyCollection<DaysUntilEvent> GetDaysUntilEvents() {
             var result = new List<DaysUntilEvent>();
-            var eventsData = config.Split(';');
+            var eventsData = $"{DaysUntilEventsAnnual};{DaysUntilEventsOnce}".Split(';');
             foreach (var eventData in eventsData)
             {
                 var parts = eventData.Split('|');

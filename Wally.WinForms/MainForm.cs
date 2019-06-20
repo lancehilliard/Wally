@@ -17,31 +17,26 @@ namespace Wally.WinForms
         private static readonly string QuotaUsername = ConfigurationManager.AppSettings["QuotaUsername"];
         private static readonly string QuotaPassword = ConfigurationManager.AppSettings["QuotaPassword"];
         private static readonly string BudgetApiKey = ConfigurationManager.AppSettings["BudgetApiKey"];
-        private static readonly string BudgetCategories = ConfigurationManager.AppSettings["BudgetCategories"];
         private static readonly string BrowserDocumentContent = ConfigurationManager.AppSettings["BrowserDocumentContent"];
-        private static readonly string WeatherCoordinate = ConfigurationManager.AppSettings["WeatherCoordinate"];
-        private static readonly string DaysUntilEvents = ConfigurationManager.AppSettings["DaysUntilEvents"];
         private readonly DataQuotaInfoGetter _dataQuotaInfoGetter = new DataQuotaInfoGetter();
         private readonly WeatherGetter _weatherGetter = new WeatherGetter(WeatherApiKey, new IconGetter());
         private readonly BackgroundWorker _netGraphBackgroundWorker = new BackgroundWorker();
         private readonly BudgetBalanceGetter _budgetBalanceGetter = new BudgetBalanceGetter(BudgetApiKey);
-        private readonly ConfigAdapter _configAdapter = new ConfigAdapter();
+        private readonly ConfigGetter _configGetter = new ConfigGetter();
         private readonly List<bool> _netResults = new List<bool>();
         private DateTime _internetLastDetected;
         private decimal _preDawnUsage = default(decimal);
         private readonly IReadOnlyCollection<BudgetApiCategory> _budgetApiCategories;
         private readonly WeatherCoordinate _weatherCoordinate;
         private int _daysUntilEventsIndex = 0;
+        private string _weatherDescription;
 
         public MainForm()
         {
             InitializeComponent();
-            var configs = new List<string> {WeatherApiKey, QuotaUsername, QuotaPassword, BudgetApiKey, BudgetCategories, WeatherCoordinate};
-            if (configs.Any(string.IsNullOrWhiteSpace)) {
-                throw new TypeInitializationException(GetType().Name, new Exception("Invalid configuration."));
-            }
-            _budgetApiCategories = _configAdapter.ToBudgetApiCategories(BudgetCategories);
-            _weatherCoordinate = _configAdapter.ToWeatherCoordinate(WeatherCoordinate);
+            // todo mlh check appSettings for empty strings
+            _budgetApiCategories = _configGetter.GetBudgetApiCategories();
+            _weatherCoordinate = _configGetter.GetWeatherCoordinate();
         }
 
         private void MainForm_Load(object sender, EventArgs e) {
@@ -60,8 +55,14 @@ namespace Wally.WinForms
         private async void UpdateBalances() {
             var categoryBalanceDisplays = new List<string>();
             foreach (var budgetApiCategory in _budgetApiCategories) {
+                var display = budgetApiCategory.DisplayName;
                 var balance = await _budgetBalanceGetter.Get(budgetApiCategory.BudgetId, budgetApiCategory.CategoryId);
-                categoryBalanceDisplays.Add($"{budgetApiCategory.DisplayName}: ${balance}");
+                if (budgetApiCategory.ExtraDollars > 0)
+                {
+                    display = $"{display} (${budgetApiCategory.ExtraDollars})";
+                    balance = balance + budgetApiCategory.ExtraDollars;
+                }
+                categoryBalanceDisplays.Add($"{display}: ${balance}");
             }
             var balancesText = string.Join("; ", categoryBalanceDisplays);
             BalancesLabel.Text = balancesText;
@@ -93,7 +94,7 @@ namespace Wally.WinForms
             var f2 = dailyForecasts.ElementAt(1);
             var f3 = dailyForecasts.ElementAt(2);
             var f4 = dailyForecasts.ElementAt(3);
-            NowLabel.Text = $"Now:{Math.Round(currentConditions.FahrenheitTemperature)}F {currentConditions.Description}";
+            _weatherDescription = $"{Math.Round(currentConditions.FahrenheitTemperature)}F {currentConditions.Description}";
             forecastUserControl1.LoadData($"{f1.When:ddd}", f1.MaximumFahrenheitTemperature, f1.MinimumFahrenheitTemperature, f1.IconBase64, f1.Summary);
             forecastUserControl2.LoadData($"{f2.When:ddd}", f2.MaximumFahrenheitTemperature, f2.MinimumFahrenheitTemperature, f2.IconBase64, f2.Summary);
             forecastUserControl3.LoadData($"{f3.When:ddd}", f3.MaximumFahrenheitTemperature, f3.MinimumFahrenheitTemperature, f3.IconBase64, f3.Summary);
@@ -187,7 +188,7 @@ namespace Wally.WinForms
 
         public void UpdateDaysUntil()
         {
-            var daysUntilEvents = _configAdapter.ToDaysUntilEvents(DaysUntilEvents).Where(x => x.DaysUntil <= x.DisplayCountInDays).ToList();
+            var daysUntilEvents = _configGetter.GetDaysUntilEvents().Where(x => x.DaysUntil <= x.DisplayCountInDays).ToList();
             if (daysUntilEvents.Any())
             {
                 DaysRemainingLabel.Show();
@@ -221,6 +222,7 @@ namespace Wally.WinForms
         }
 
         private void timer1sec_Tick(object sender, EventArgs e) {
+            NowLabel.Text = $@"{DateTime.Now:h:mm} {_weatherDescription}";
             UpdateNetgraph();
         }
     }
