@@ -30,7 +30,10 @@ namespace Wally.Core
                         };
                         var content = string.Join("&", data.Select(x=>$"{x.Key}={WebUtility.UrlEncode(x.Value)}"));
                         request.Content = new StringContent(content, Encoding.UTF8, "application/x-www-form-urlencoded");
-                        await httpClient.SendAsync(request);
+                        var response = await httpClient.SendAsync(request);
+                        var responseStream = await response.Content.ReadAsStreamAsync();
+                        // ReSharper disable once ObjectCreationAsStatement
+                        new StreamReader (responseStream);
                     }
                     using (var request = new HttpRequestMessage(new HttpMethod("GET"), "https://customer.xfinity.com/apis/services/internet/usage"))
                     {
