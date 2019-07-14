@@ -32,8 +32,8 @@ namespace Wally.Core
                         request.Content = new StringContent(content, Encoding.UTF8, "application/x-www-form-urlencoded");
                         var response = await httpClient.SendAsync(request);
                         var responseStream = await response.Content.ReadAsStreamAsync();
-                        // ReSharper disable once ObjectCreationAsStatement
-                        new StreamReader (responseStream);
+                        var streamReader = new StreamReader (responseStream);
+                        streamReader.ReadToEnd();
                     }
                     using (var request = new HttpRequestMessage(new HttpMethod("GET"), "https://customer.xfinity.com/apis/services/internet/usage"))
                     {
