@@ -99,7 +99,7 @@ namespace Wally.WinForms
             forecastUserControl2.LoadData($"{f2.When:ddd}", f2.MaximumFahrenheitTemperature, f2.MinimumFahrenheitTemperature, f2.IconBase64, f2.Summary);
             forecastUserControl3.LoadData($"{f3.When:ddd}", f3.MaximumFahrenheitTemperature, f3.MinimumFahrenheitTemperature, f3.IconBase64, f3.Summary);
             forecastUserControl4.LoadData($"{f4.When:ddd}", f4.MaximumFahrenheitTemperature, f4.MinimumFahrenheitTemperature, f4.IconBase64, f4.Summary);
-            SetBrowserDocumentText(webBrowser1, BrowserDocumentContent.Replace("r=___", $"r={DateTime.Now.Ticks}"));
+            SetBrowserDocumentText(webBrowser1, BrowserDocumentContent);
         }
 
         private void SetBrowserDocumentText(WebBrowser webBrowser, string documentText) {

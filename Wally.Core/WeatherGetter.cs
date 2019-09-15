@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 
+// todo mlh https://www.yr.no/place/United_States/Tennessee/Super_8_Memphis_Airport_E_Tn/forecast.xml
+
 namespace Wally.Core {
     public class WeatherGetter {
         private static readonly DateTime Epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
